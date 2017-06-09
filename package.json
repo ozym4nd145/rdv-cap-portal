@@ -1,0 +1,22 @@
+{
+  "name": "rdv-cap-portal",
+  "version": "1.0.0",
+  "description": "Campus Representative Portal for RDV 2017",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozym4nd145/rdv-cap-portal.git"
+  },
+  "author": "Suyash Agrawal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ozym4nd145/rdv-cap-portal/issues"
+  },
+  "homepage": "https://github.com/ozym4nd145/rdv-cap-portal#readme",
+  "dependencies": {
+    "aws-sdk": "^2.66.0"
+  }
+}
