@@ -1,4 +1,10 @@
 // app/routes.js
+
+//for file upload
+var path = require('path');
+var fs = require('fs');
+var formidable = require('formidable');
+
 module.exports = function(app, passport) {
 
     // =====================================
@@ -26,7 +32,7 @@ module.exports = function(app, passport) {
         form.multiples = true;
 
         // store all uploads in the /uploads directory
-        form.uploadDir = path.join(__dirname, '/uploads');
+        form.uploadDir = path.join(__dirname, '../uploads');
 
         // every time a file has been uploaded successfully,
         // rename it to it's orignal name
@@ -71,7 +77,6 @@ module.exports = function(app, passport) {
     // =====================================
     // show the signup form
     app.get('/signup', function(req, res) {
-
         // render the page and pass in any flash data if it exists
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });

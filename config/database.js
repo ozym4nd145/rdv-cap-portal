@@ -6,6 +6,8 @@
 const AWS = require('aws-sdk');
 
 module.exports = {
+  accessKeyId: "myKeyId",
+  secretAccessKey: "secretKey",
   region: "us-west-2",
   endpoint: "http://localhost:8000",
 };

@@ -16,10 +16,8 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
 var configDB = require('./config/database.js');
-//for file uploaad
+
 var path = require('path');
-var formidable = require('formidable');
-var fs = require('fs');
 
 
 // configuration ===============================================================
