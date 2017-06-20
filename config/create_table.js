@@ -1,6 +1,8 @@
 var AWS = require('aws-sdk');
 
 AWS.config.update({
+  accessKeyId: "myKeyId",
+  secretAccessKey: "secretKey",
   region: "us-west-2",
   endpoint: "http://localhost:8000"
 });
@@ -71,7 +73,7 @@ var params = {
     
 };
 dynamodb.createTable(params, function(err, data) {
-    if (err) ppJson(err); // an error occurred
-    else ppJson(data); // successful response
+    if (err) console.log(err); // an error occurred
+    else console.log(data); // successful response
 
 });
