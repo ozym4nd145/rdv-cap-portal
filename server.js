@@ -5,7 +5,7 @@
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 var AWS = require("aws-sdk");
 var passport = require('passport');
 var flash    = require('connect-flash');
@@ -37,16 +37,17 @@ app.use(bodyParser()); // get information from html forms
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: 'iamgoingtobethebestprogrammerever' })); // session secret
+app.use(session({ secret: '#$%^&*()!@$%^&*' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 //required for file upload
-app.use(express.static(path.join(__dirname, 'config')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res){
+    console.log(__dirname);
   res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
