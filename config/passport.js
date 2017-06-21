@@ -13,6 +13,7 @@ var bcrypt   = require('bcrypt-nodejs');
 
 // load the auth variables
 var configAuth = require('./auth');
+var configCons = require("./constants");
 
 const generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -57,7 +58,7 @@ module.exports = function(passport,AWS) {
         docClient.get(params, function(err, data) {
             if(data) done(err,data.Item);
             else done(err,data);
-      });
+        });
     });
 
     // =========================================================================
@@ -93,6 +94,7 @@ module.exports = function(passport,AWS) {
             if (data.Count > 0) {
               return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             }else{
+              date = (new Date).getTime();
               var params = {
                   TableName: 'RDV',
                   Item: { // a map of attribute name to AttributeValue
@@ -100,10 +102,10 @@ module.exports = function(passport,AWS) {
                       email: email,
                       password: generateHash(password),
                       type: "user",
-                      created: (new Date).getTime(),
+                      created: date,
                       is_checked: 1,
                       submission: {},
-                      points: 0,
+                      points: date,
                   },
               };
               docClient.put(params, function(err, data) {
@@ -235,6 +237,7 @@ module.exports = function(passport,AWS) {
                   var user = data.Items[0];
                   return done(null, user);
                 }else{
+                  date = (new Date).getTime();
                   var params = {
                       TableName: 'RDV',
                       Item: { // a map of attribute name to AttributeValue
@@ -242,10 +245,10 @@ module.exports = function(passport,AWS) {
                           email: email,
                           password: generateHash(password),
                           type: "user",
-                          created: (new Date).getTime(),
+                          created: date,
                           is_checked: 1,
                           submission: {},
-                          points: 0,
+                          points: date,
                           fb_id: profile.id,
                           fb_token: token,
                           name: profile.name.givenName + ' ' + profile.name.familyName,
