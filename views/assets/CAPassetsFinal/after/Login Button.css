@@ -25,8 +25,7 @@
 	box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
 	filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
 }
-.Register_Login
-{
+.Register_Login{
 	font-family : Comfortaa;
 	font-size : 24px;
 	line-height : 72px;

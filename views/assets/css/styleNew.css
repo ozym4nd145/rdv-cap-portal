@@ -8,21 +8,10 @@
 /* Clear Floated Elements
 ---------------------------------*/
 #loginButton{
-	/*padding:15px 35px;
-	background:#7cc576;
-	color:#fff !important;
-	font-size:16px;
-	font-weight:400;
-	font-family: 'Montserrat', sans-serif;
-	display:inline-block;
-	border-radius:3px;
-	text-transform:uppercase;
-	line-height:25px;
-	margin-bottom:20px;*/
+
 	transition:all 0.3s ease-in-out;
 	-moz-transition:all 0.3s ease-in-out;
 	-webkit-transition:all 0.3s ease-in-out;
-	/*content: '\0020';*/
 
 	border-style : Solid;
 	border-color : #FFFFFF;
@@ -39,12 +28,63 @@
 	z-index: 2;
 	background-color: Transparent;
 }
-#loginButton:hover {
-	text-decoration:none;
-	color:#7cc576 !important;
-	background:#fff;
+
+#Side_arrow{
+	/*background-image : url(Side_arrow.png);*/
+	/*background-repeat : no-repeat;*/
+	position : absolute ;
+	left : 787px;
+	top : 479px;
+	width : 12px;
+	height : 21px;
+
+	z-index: 10;
 }
-#loginButtonOuter{
+
+.Register_Login_text{
+	font-family : Comfortaa;
+	font-size : 24px;
+	line-height : 72px;
+	color : #FFFFFF;
+	color : rgb(255, 255, 255);
+
+	z-index: 5;
+}
+.Button_inner_boundary{
+	border-style : Solid;
+	border-color : #FFFFFF;
+	border-color : rgba(255, 255, 255, 1);
+	border-width : 2px;
+	position : absolute ;
+	left : 552px;
+	top : 452px;
+	width : 265px;
+	height : 73px;
+	box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+	filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
+
+
+	transition:all 0.3s ease-in-out;
+	-moz-transition:all 0.3s ease-in-out;
+	-webkit-transition:all 0.3s ease-in-out;
+	z-index: 3;
+
+}
+.Button_inner_boundary:hover
+{
+background : #00A99D;
+background : rgba(0, 169, 157, 1);
+position : absolute ;
+left : 552px;
+top : 452px;
+width : 265px;
+height : 73px;
+box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
+
+z-index: 1
+}
+.Button_outer_boundary_1_{
 	border-style : Solid;
 	border-color : #FFFFFF;
 	border-color : rgba(255, 255, 255, 1);
@@ -57,11 +97,28 @@
 	box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
 	filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
 
+	transition:all 0.3s ease-in-out;
+	-moz-transition:all 0.3s ease-in-out;
+	-webkit-transition:all 0.3s ease-in-out;
 	z-index: 1;
-	/*content: '\0020';*/
-	  background-color: Transparent;
 }
-.clear {
+
+.Button_outer_boundary_1_:hover{
+border-style : Solid;
+border-color : #00A99D;
+border-color : rgba(0, 169, 157, 1);
+border-width : 2px;
+position : absolute ;
+left : 548px;
+top : 448px;
+width : 273px;
+height : 81px;
+box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
+
+z-index: 1;
+}
+/*.clear {
   clear: both;
   display: block;
   overflow: hidden;
@@ -82,7 +139,7 @@
 
 .clearfix:after {
   clear: both;
-}
+}*/
 
 .figure{ margin:0px;}
 
