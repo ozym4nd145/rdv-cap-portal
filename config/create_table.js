@@ -10,7 +10,7 @@ AWS.config.update({
 var dynamodb = new AWS.DynamoDB();
 
 var params = {
-    TableName: 'Users',
+    TableName: 'RDV',
     KeySchema: [ // The type of of schema.  Must start with a HASH type, with an optional second RANGE.
         { // Required HASH type attribute
             AttributeName: 'uuid',
@@ -23,6 +23,10 @@ var params = {
             AttributeType: 'S', // (S | N | B) for string, number, binary
         },
         {
+            AttributeName: 'type',
+            AttributeType: 'S', // user, submission, event etc.
+        },
+        {
             AttributeName: 'fb_id',
             AttributeType: 'S', // (S | N | B) for string, number, binary
         },
@@ -30,6 +34,19 @@ var params = {
             AttributeName: 'email',
             AttributeType: 'S', // (S | N | B) for string, number, binary
         },
+        {
+            AttributeName: 'created',
+            AttributeType: 'N', // (S | N | B) for string, number, binary
+        },
+        {
+            AttributeName: 'is_checked',
+            AttributeType: 'N', // (for submissions only)
+        },
+        {
+            AttributeName: 'points',
+            AttributeType: 'N', // (useful for users only)
+        },
+        
     ],
     ProvisionedThroughput: { // required provisioned throughput for the table
         ReadCapacityUnits: 100, 
@@ -58,6 +75,46 @@ var params = {
                 { // Required HASH type attribute
                     AttributeName: 'fb_id',
                     KeyType: 'HASH',
+                }
+            ],
+            Projection: { // attributes to project into the index
+                ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
+            },
+            ProvisionedThroughput: { // throughput to provision to the index
+                ReadCapacityUnits: 100,
+                WriteCapacityUnits: 100,
+            },
+        },
+        { 
+            IndexName: 'submission', 
+            KeySchema: [
+                { // Required HASH type attribute
+                    AttributeName: 'is_checked',
+                    KeyType: 'HASH',
+                },
+                {
+                    AttributeName: 'created',
+                    KeyType: 'RANGE',
+                }
+            ],
+            Projection: { // attributes to project into the index
+                ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
+            },
+            ProvisionedThroughput: { // throughput to provision to the index
+                ReadCapacityUnits: 100,
+                WriteCapacityUnits: 100,
+            },
+        },
+        { 
+            IndexName: 'leaderboard', 
+            KeySchema: [
+                { // Required HASH type attribute
+                    AttributeName: 'type',
+                    KeyType: 'HASH',
+                },
+                {
+                    AttributeName: 'points',
+                    KeyType: 'RANGE',
                 }
             ],
             Projection: { // attributes to project into the index

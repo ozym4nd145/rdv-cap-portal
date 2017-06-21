@@ -3,9 +3,14 @@
 //for file upload
 var path = require('path');
 var fs = require('fs');
+var uuidV1 = require('uuid/v1');
 var formidable = require('formidable');
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport,AWS) {
+    // =========================================================================
+    // docClient setup ==================================================
+    // =========================================================================
+    var docClient = new AWS.DynamoDB.DocumentClient();
 
     // =====================================
     // HOME PAGE (with login links) ========
@@ -113,6 +118,10 @@ module.exports = function(app, passport) {
         }));
 
 
+    
+    
+    
+    
     // =====================================
     // LOGOUT ==============================
     // =====================================
@@ -120,6 +129,108 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    // =====================================
+    // SUBMISSION ==========================
+    // =====================================
+
+    // Create new submission
+    app.post('/submit',isLoggedIn,function(req,res) {
+        console.log(req.body);
+        post_id = req.body.post_id;
+        url = req.body.image_url;
+        // NOTE: PUT A CHECK IF POST_ID IS VALID!!
+        user = req.user;
+        console.log(user.submission);
+
+        submission_id = uuidV1();
+
+        // Adding new submission to table
+        var params = {
+            TableName: 'RDV',
+            Item: { // a map of attribute name to AttributeValue
+                uuid: submission_id,
+                "user_id": req.user.uuid,
+                "type": "submission",
+                "post_id": post_id,
+                "url": url,
+                "created": (new Date).getTime(),
+                "is_checked": 0,
+                "points": 0,
+            },
+        };
+        docClient.put(params, function(err, data) {
+            if (err)
+                throw (err); // an error occurred
+            // successful response then add submission to the user array
+            var params = {
+                TableName:'RDV',
+                Key:{
+                    uuid: req.user.uuid,
+                },
+                ExpressionAttributeNames: { // a map of substitutions for attribute names with special characters
+                    "#id": post_id,
+                },
+                ExpressionAttributeValues:{
+                    ":r":[submission_id],
+                },
+                ReturnValues:"NONE"
+            };
+            if (!(post_id in user.submission)){
+                // if new submission
+                params["UpdateExpression"] = "set submission.#id = :r";
+                
+            } else {
+                // adding submission
+                params["UpdateExpression"] = "set submission.#id = list_append(submission.#id, :r)";
+            }
+            
+            docClient.update(params, function(err, data) {
+                if (err){
+                    req.flash("failure", "Some error occurred. Please try after sometime.")
+                    res.redirect("/profile");
+                } // an error occurred
+                // successful response
+                else {
+                    req.flash("success","Submission successfully made.")
+                    res.redirect("/profile");
+                }
+            });
+        });
+    });
+
+    // =====================================
+    // LEADERBOARD ==========================
+    // =====================================
+
+    app.get('/leaderboard',isLoggedIn,function(req,res) {
+        var params = {
+            TableName: 'RDV',
+            IndexName: 'leaderboard', // optional (if querying an index)
+            Limit: 20,
+            KeyConditionExpression: '#type = :val', // a string representing a constraint on the attribute
+            // FilterExpression: 'attr_name = :val', // a string representing a constraint on the attribute
+            ExpressionAttributeNames: { // a map of substitutions for attribute names with special characters
+                '#type': 'type'
+            },
+            ExpressionAttributeValues: {
+            ':val': "user"
+            },
+            ScanIndexForward: false, // optional (true | false) defines direction of Query in the index
+        };
+        docClient.query(params, function(err, data) {
+            if (err){
+                req.flash("failure", "Some error occurred. Please try after sometime.")
+                res.redirect("/profile");
+            } // an error occurred
+            // successful response
+            else {
+                req.flash("success","Submission successfully made.")
+                res.render("leaderboard.ejs",{leaderboard: data.Items});
+            }
+        });
+    });
+    
 };
 
 // route middleware to make sure a user is logged in

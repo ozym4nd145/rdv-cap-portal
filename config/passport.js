@@ -47,7 +47,7 @@ module.exports = function(passport,AWS) {
     passport.deserializeUser(function(id, done) {
         console.log("User id: " + id);        
         var params = {
-            TableName: 'Users',
+            TableName: 'RDV',
             Key: {
                 uuid: id,
             },
@@ -79,7 +79,7 @@ module.exports = function(passport,AWS) {
         process.nextTick(function() {
 
         var params = {
-            TableName: 'Users',
+            TableName: 'RDV',
             IndexName: 'mail_address', // optional (if querying an index)
             KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
             ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -94,11 +94,16 @@ module.exports = function(passport,AWS) {
               return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             }else{
               var params = {
-                  TableName: 'Users',
+                  TableName: 'RDV',
                   Item: { // a map of attribute name to AttributeValue
                       uuid: uuidV1(),
                       email: email,
                       password: generateHash(password),
+                      type: "user",
+                      created: (new Date).getTime(),
+                      is_checked: 1,
+                      submission: {},
+                      points: 0,
                   },
               };
               docClient.put(params, function(err, data) {
@@ -149,7 +154,7 @@ module.exports = function(passport,AWS) {
         // });
 
         var params = {
-            TableName: 'Users',
+            TableName: 'RDV',
             IndexName: 'mail_address', // optional (if querying an index)
             KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
             ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -199,7 +204,8 @@ module.exports = function(passport,AWS) {
         // pull in our app id and secret from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURL
+        callbackURL     : configAuth.facebookAuth.callbackURL,
+        // profileFields: ['id', 'displayName', 'name', 'gender']
 
     },
 
@@ -214,7 +220,7 @@ module.exports = function(passport,AWS) {
             console.log("checking validity");
 
             var params = {
-                TableName: 'Users',
+                TableName: 'RDV',
                 IndexName: 'facebook_id', // optional (if querying an index)
                 KeyConditionExpression: 'fb_id = :value', // a string representing a constraint on the attribute
                 ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -230,9 +236,16 @@ module.exports = function(passport,AWS) {
                   return done(null, user);
                 }else{
                   var params = {
-                      TableName: 'Users',
+                      TableName: 'RDV',
                       Item: { // a map of attribute name to AttributeValue
                           uuid: uuidV1(),
+                          email: email,
+                          password: generateHash(password),
+                          type: "user",
+                          created: (new Date).getTime(),
+                          is_checked: 1,
+                          submission: {},
+                          points: 0,
                           fb_id: profile.id,
                           fb_token: token,
                           name: profile.name.givenName + ' ' + profile.name.familyName,
