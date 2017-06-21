@@ -15,6 +15,12 @@
 	color : rgb(255, 255, 255);
 	text-shadow : 0px 0px 5px rgba(0, 0, 0, 0.3);
 	float: left;
+	position: absolute;
+	top: 16%;
+
+}
+#r2017{
+	top: 28%;
 }
 .NormalCharacterStyle1{
 font-family : Comfortaa;
@@ -22,7 +28,10 @@ font-size : 24px;
 color : #FFFFFF;
 color : rgb(255, 255, 255);
 text-shadow : 7px 7px 5px rgba(0, 0, 0, 0.3);
+position: absolute;
+top: 10%;
 }
+
 .capText{
 	font-family : Comfortaa;
 	font-size : 16px;
@@ -35,7 +44,7 @@ text-shadow : 7px 7px 5px rgba(0, 0, 0, 0.3);
 }
 
 .RDV_Logo{
-	background : rgba(255, 255, 255, 1);
+	/*background : rgba(255, 255, 255, 1);*/
 	background : transparent;
 	position : absolute ;
 	left : 1148px;
@@ -220,6 +229,9 @@ body {
 	background-image:url(assets/img/Eiffel_tower.png);
 	/*background:#fff;*/
 	background-repeat: no-repeat;
+	/*background-position: center;*/
+	height: 100%;
+	background-size: cover;
 	font-family: 'Open Sans', sans-serif;
 	font-size:14px;
 	font-weight:normal;
@@ -263,7 +275,7 @@ p{
 .header{
 	text-align:center;
 	background:url(../img/pw_maze_black_2X.png) left top repeat;
-	padding:280px 0;
+	/*padding:28px 0;*/
 }
 .logo{
 	width:130px;
