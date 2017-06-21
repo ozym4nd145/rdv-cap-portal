@@ -7,6 +7,68 @@
 
 /* Clear Floated Elements
 ---------------------------------*/
+.bigText{
+	font-family : Comfortaa;
+	font-weight : bold;
+	font-size : 72px;
+	color : #FFFFFF;
+	color : rgb(255, 255, 255);
+	text-shadow : 0px 0px 5px rgba(0, 0, 0, 0.3);
+	float: left;
+}
+.NormalCharacterStyle1{
+font-family : Comfortaa;
+font-size : 24px;
+color : #FFFFFF;
+color : rgb(255, 255, 255);
+text-shadow : 7px 7px 5px rgba(0, 0, 0, 0.3);
+}
+.capText{
+	font-family : Comfortaa;
+	font-size : 16px;
+	line-height : 29px;
+	color : #FFFFFF;
+	color : rgb(255, 255, 255);
+	text-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+
+	float: right;
+}
+
+.RDV_Logo{
+	background : rgba(255, 255, 255, 1);
+	background : transparent;
+	position : absolute ;
+	left : 1148px;
+	top : 89px;
+	width : 74px;
+	height : 113px;
+	box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+	filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
+}
+
+.Down_arrow_2_{
+	/*background-image : url(Down_arrow_2_.png);*/
+	background-repeat : no-repeat;
+	background: transparent;
+	position : absolute ;
+	left : 641px;
+	top : 632px;
+	width : 87px;
+	height : 59px;
+}
+.Vertical_Rectangle{
+	border-style : Solid;
+	border-color : #FFFFFF;
+	border-color : rgba(255, 255, 255, 1);
+	border-width : 2px;
+	position : absolute ;
+	left : 1109px;
+	top : 72px;
+	width : 152px;
+	height : 296px;
+	box-shadow : 0px 0px 5px rgba(0, 0, 0, 0.35);
+	filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=0, OffY=0, Color='#000000') ;
+}
 #loginButton{
 
 	transition:all 0.3s ease-in-out;
@@ -157,6 +219,7 @@ a, a:hover, a:active{ outline:0px !important}
 body {
 	background-image:url(assets/img/Eiffel_tower.png);
 	/*background:#fff;*/
+	background-repeat: no-repeat;
 	font-family: 'Open Sans', sans-serif;
 	font-size:14px;
 	font-weight:normal;
