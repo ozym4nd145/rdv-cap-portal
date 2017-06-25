@@ -1,0 +1,62 @@
+/fblogin => 
+    POST:
+        Input =>
+            Nothing
+        Return =>
+            status:
+            error:
+            session_id:
+            user: {name , college, email, points}
+
+/submission =>
+    GET:
+        Input =>
+            session_id:
+        Return =>
+            status:
+            error:
+            session_id:
+            submission:
+    POST:
+        Input =>
+            session_id:
+            post_id:
+            image_url:
+            details:
+        Return =>
+            status:
+            error:
+            session_id:
+
+/leaderboard =>
+    GET:
+        Input =>
+            session_id:
+        Return =>
+            status:
+            error:
+            session_id:
+            leader_board:
+
+/approve =>
+    GET:
+        Input =>
+            session_id:
+        Return =>
+            status:
+            error:
+            session_id:
+            pending_approvals:
+
+    POST:
+        Input =>
+            session_id:
+            post_id:
+            point:
+            details:
+        Return =>
+            status:
+            error:
+            session_id:
+
+korkudeepak@gmail.com
