@@ -1,6 +1,7 @@
 var uuidV1 = require('uuid/v1');
 var utils = require('../config/utils.js');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
+var fbAuth = require("../config/fbAuth.js");
 
 var docClient = utils.connectToDB();
 
@@ -33,6 +34,74 @@ function login(req, res) {
         token: token,
       });
     }
+  });
+}
+
+function fb_login(req, res) {
+  var token = req.body.token;
+  if (!token)
+    return utils.error(res, 401, "Facebook Auth Token not found");
+
+  fbAuth.token_validate(token, (err, user) => {
+    if (err) return utils.error(res, 401, "Facebook Auth Token was not valid");
+    var params = {
+      TableName: 'RDV',
+      IndexName: 'mail_address', // optional (if querying an index)
+      KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
+      ExpressionAttributeValues: { // a map of substitutions for all attribute values
+        ':value': user.email,
+      },
+    };
+    docClient.query(params, function (err, data) {
+      if (err) return utils.error(res, 401, "Internal Server Error");
+      if (data.Count > 0) {
+        var old_user = data.Items[0];
+        if (old_user.fb_id === undefined) {
+          // if logging in for first time
+          var params = {
+            TableName: 'RDV',
+            Key: {
+              uuid: old_user.uuid,
+            },
+            UpdateExpression: 'SET fb_id = :fb_id, #name = :name, first_name = :first_name, last_name = :last_name, image_url = :profilePicture, fb_token = :token',
+            ConditionExpression: 'attribute_not_exists(fb_id)',
+            ExpressionAttributeNames: {
+              '#name': "name",
+            },
+            ExpressionAttributeValues: { // a map of substitutions for all attribute values
+              ':fb_id': user.fb_id,
+              ":name": user.name,
+              ":last_name": user.lastName,
+              ":first_name": user.firstName,
+              ":profilePicture": user.profilePicture,
+              ":token": user.token,
+            },
+            ReturnValues: 'ALL_NEW', // optional (NONE | ALL_OLD | UPDATED_OLD | ALL_NEW | UPDATED_NEW)
+          };
+          docClient.update(params, function (err, data) {
+            if (err) return utils.error(res, 401, "Internal Server Error: " + err);
+            var user = data.Attributes;
+            delete user['password'];
+            const token = utils.generateToken(user);
+            return res.json({
+              user: user,
+              token: token,
+            });
+          });
+        } else {
+          // return stored user
+          var user = old_user;
+          delete user['password'];
+          const token = utils.generateToken(user);
+          return res.json({
+            user: user,
+            token: token,
+          });
+        }
+      } else {
+        return utils.error(res, 401, "Email not registered with RDV.");
+      }
+    });
   });
 }
 
@@ -200,12 +269,12 @@ function leaderboard(req, res) {
   });
 }
 
-const generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+const generateHash = function (password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-const validPassword = function(password,hashed) {
-    return bcrypt.compareSync(password, hashed);
+const validPassword = function (password, hashed) {
+  return bcrypt.compareSync(password, hashed);
 };
 
 module.exports = {
@@ -213,5 +282,6 @@ module.exports = {
   signup: signup,
   profile: profile,
   submit: submit,
-  leaderboard: leaderboard
+  leaderboard: leaderboard,
+  fb_login: fb_login
 }
