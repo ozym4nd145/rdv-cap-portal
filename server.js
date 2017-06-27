@@ -2,50 +2,42 @@
 
 // set up ======================================================================
 // get all the tools we need
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
-//var mongoose = require('mongoose');
-var AWS = require("aws-sdk");
-var passport = require('passport');
-var flash    = require('connect-flash');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
 
-var morgan       = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+var bodyParser = require('body-parser');
 
-var configDB = require('./config/database.js');
-
-var path = require('path');
-
-
-// configuration ===============================================================
-// mongoose.connect(configDB.url); // connect to our database
-
-AWS.config.update(configDB);
-
-require('./config/passport')(passport,AWS); // pass passport for configuration
+var userController = require("./controllers/user.js");
+var adminController = require("./controllers/admin.js");
+var sessionController = require("./controllers/session.js");
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
-app.set('view engine', 'ejs'); // set up ejs for templating
+app.get('/', function (req, res) {
+    res.send('Hi, You are in the homepage'); // load the index.ejs file
+});
 
-// required for passport
-app.use(session({ secret: '#$%^&*()!@$%^&*' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.post('/api/login', userController.login);
 
+app.post('/api/signup', userController.signup);
 
-//required for file upload
-app.use(express.static(path.join(__dirname, 'public')));
+app.get('/api/profile', sessionController.isAuthenticated, userController.profile);
 
-// routes ======================================================================
-require('./app/routes.js')(app, passport,AWS); // load our routes and pass in our app and fully configured passport
+// Create new submission
+app.post('/api/submit', sessionController.isAuthenticated, userController.submit);
+
+// Approve new submission
+app.post('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.approve_submission);
+
+app.get('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_submissions);
+
+app.get('/api/leaderboard', sessionController.isAuthenticated, userController.leaderboard);
 
 // launch ======================================================================
 app.listen(port);
