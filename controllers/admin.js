@@ -6,8 +6,10 @@ var docClient = utils.connectToDB();
 function approve_submission(req, res) {
   submission_id = req.body.submission_id;
   points = parseInt(req.body.points, 10);
-  console.log(points);
-  console.log(points * config.scaling_factor);
+
+  if(!submission_id || !points)
+    return utils.error(res, 401, "Post submission id or points not given");
+
   date = (new Date).getTime();
   var params = {
     TableName: 'RDV',

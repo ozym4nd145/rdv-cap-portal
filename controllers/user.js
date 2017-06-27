@@ -181,6 +181,10 @@ function submit(req, res) {
   console.log(req.body);
   post_id = req.body.post_id;
   url = req.body.image_url;
+
+  if(!post_id || !url)
+    return utils.error(res, 401, "Post id or image url not found");
+
   // NOTE: PUT A CHECK IF POST_ID IS VALID!!
   user = req.user;
   console.log(user.submission);

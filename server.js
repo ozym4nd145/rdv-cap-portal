@@ -23,9 +23,6 @@ app.get('/', function (req, res) {
 
 app.post('/api/login', userController.login);
 app.post('/api/auth/facebook', userController.fb_login );
-app.get('/api/auth/me', function (req, res) {
-    res.json("{'error':True}");
-})
 app.post('/api/signup', userController.signup);
 
 app.get('/api/profile', sessionController.isAuthenticated, userController.profile);
