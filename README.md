@@ -2,11 +2,13 @@
 
 # Usage
 
-1. Download dynamodb local (us west 1) and deploy it on port 3000
+1. Download dynamodb local (us west 1) and deploy it on port 8000
 2. Clone this repo and run npm install
 3. Create table using ``` node ./config/create_table.js ```
 4. Set environment variables (RDV_APP_ID,RDV_APP_SECRET,TOKEN_SECRET)
 5. Run server by node server.js .
+
+##Server works on 8080
 
 # API
 
