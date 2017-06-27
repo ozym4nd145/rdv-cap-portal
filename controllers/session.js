@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var docClient = utils.connectToDB();
 
 function isAuthenticated(req, res, next) {
+    // console.log("Authenticating");
     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
     if (!token) {
         return utils.error(res, 401, "Token not found");
@@ -25,10 +26,11 @@ function isAuthenticated(req, res, next) {
             } else {
                 if (!data.Item)
                     return utils.error(res, 401, "Invalid Token");
+                // console.log("Apending: ",data.Item)
                 req.user = data.Item;
+                next();
             }
         });
-        next();
     });
 }
 // route middleware to make sure a user is logged in
