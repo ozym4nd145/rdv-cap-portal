@@ -109,7 +109,7 @@ function signup(req, res) {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password)
-    return utils.error(res, 401, "Email or Password is wrong");
+    return utils.error(res, 401, "Email or Password is not provided");
   var params = {
     TableName: 'RDV',
     IndexName: 'mail_address', // optional (if querying an index)
@@ -118,7 +118,7 @@ function signup(req, res) {
       ':value': email,
     },
   };
-
+  console.log("doing query");
   docClient.query(params, function (err, data) {
     if (err) {
       return utils.error(res, 500, "Internal Server Error");

@@ -5,16 +5,24 @@ var port = process.env.PORT || 8080;
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var userController = require("./controllers/user.js");
 var adminController = require("./controllers/admin.js");
 var sessionController = require("./controllers/session.js");
+// enable cors
+var corsOption = {
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  exposedHeaders: ['x-auth-token']
+};
+
+app.use(cors(corsOption));
 
 app.use(morgan('dev')); // log every request to the console
-bodyParser.urlencoded({
-    extended: true
-}); // get information from html forms
-app.use(bodyParser());
+ // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
     res.sendfile("./index.html");
