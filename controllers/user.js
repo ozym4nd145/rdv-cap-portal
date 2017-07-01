@@ -42,14 +42,14 @@ function fb_login(req, res) {
   if (!token)
     return utils.error(res, 401, "Facebook Auth Token not found");
 
-  fbAuth.token_validate(token, (err, user) => {
+  fbAuth.token_validate(token, (err, fb_user) => {
     if (err) return utils.error(res, 401, "Facebook Auth Token was not valid");
     var params = {
       TableName: 'RDV',
       IndexName: 'mail_address', // optional (if querying an index)
       KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
       ExpressionAttributeValues: { // a map of substitutions for all attribute values
-        ':value': user.email,
+        ':value': fb_user.email,
       },
     };
     docClient.query(params, function (err, data) {
@@ -69,12 +69,12 @@ function fb_login(req, res) {
               '#name': "name",
             },
             ExpressionAttributeValues: { // a map of substitutions for all attribute values
-              ':fb_id': user.fb_id,
-              ":name": user.name,
-              ":last_name": user.lastName,
-              ":first_name": user.firstName,
-              ":profilePicture": user.profilePicture,
-              ":token": user.token,
+              ':fb_id': fb_user.fb_id,
+              ":name": fb_user.name,
+              ":last_name": fb_user.lastName,
+              ":first_name": fb_user.firstName,
+              ":profilePicture": fb_user.profilePicture,
+              ":token": fb_user.token,
             },
             ReturnValues: 'ALL_NEW', // optional (NONE | ALL_OLD | UPDATED_OLD | ALL_NEW | UPDATED_NEW)
           };
