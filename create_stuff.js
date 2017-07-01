@@ -1,12 +1,9 @@
 var bcrypt   = require('bcrypt-nodejs');
-var configAuth = require('./config/auth');
-var configCons = require("./config/constants");
 var uuidV1 = require('uuid/v1');
+var utils = require('./config/utils.js');
 
-var AWS = require("aws-sdk");
-var configDB = require('./config/database.js');
-AWS.config.update(configDB);
-var docClient = new AWS.DynamoDB.DocumentClient();
+var docClient = utils.connectToDB();
+
 
 const generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
