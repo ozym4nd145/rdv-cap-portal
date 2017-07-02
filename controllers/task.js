@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt-nodejs');
 
 var TASK_UUID;
 var params = {
-    TableName: 'RDV',
+    TableName: "2017_RDV_CAP",
     IndexName: 'mail_address', // optional (if querying an index)
     KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
     ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -27,7 +27,7 @@ docClient.query(params, function (err, data) {
             TASK_UUID = uuidV1();
             date = (new Date).getTime();
             var params = {
-                TableName: 'RDV',
+                TableName: "2017_RDV_CAP",
                 Item: { // a map of attribute name to AttributeValue
                     uuid: TASK_UUID,
                     email: config.task_mail,
@@ -58,7 +58,7 @@ docClient.query(params, function (err, data) {
 //GET TASKS
 function get_tasks(req, res) {
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: TASK_UUID,
         },
@@ -88,7 +88,7 @@ function create_task(req, res) {
     task["last_modified"] = (new Date).getTime();
     
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: TASK_UUID,
         },
@@ -125,7 +125,7 @@ function modify_task(req, res) {
     new_task["last_modified"] = (new Date).getTime();
 
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: TASK_UUID,
         },
@@ -147,7 +147,7 @@ function modify_task(req, res) {
                     new_tasks.push(new_task);
             }
             var params = {
-                TableName: 'RDV',
+                TableName: "2017_RDV_CAP",
                 Key: {
                     uuid: TASK_UUID,
                 },
@@ -177,7 +177,7 @@ function delete_task(req, res) {
     if (!task_id)
         return utils.error(res, 401, "Task id not given");
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: TASK_UUID,
         },
@@ -196,7 +196,7 @@ function delete_task(req, res) {
                     new_tasks.push(tasks[i]);
             }
             var params = {
-                TableName: 'RDV',
+                TableName: "2017_RDV_CAP",
                 Key: {
                     uuid: TASK_UUID,
                 },

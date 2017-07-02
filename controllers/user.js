@@ -12,7 +12,7 @@ function login(req, res) {
     if (!email || !password)
         return utils.error(res, 401, "Email or Password is wrong");
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
         KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
         ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -52,7 +52,7 @@ function fb_login(req, res) {
     fbAuth.token_validate(token, (err, fb_user) => {
         if (err) return utils.error(res, 401, "Facebook Auth Token was not valid");
         var params = {
-            TableName: 'RDV',
+            TableName: "2017_RDV_CAP",
             IndexName: 'mail_address', // optional (if querying an index)
             KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
             ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -72,7 +72,7 @@ function fb_login(req, res) {
                 if (old_user.fb_id === undefined) {
                     // if logging in for first time
                     var params = {
-                        TableName: 'RDV',
+                        TableName: "2017_RDV_CAP",
                         Key: {
                             uuid: old_user.uuid,
                         },
@@ -129,7 +129,7 @@ function signup(req, res) {
     if (!email || !password || !city || !college || !phone)
         return utils.error(res, 401, "All fields are not provided");
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
         KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
         ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -150,7 +150,7 @@ function signup(req, res) {
             } else {
                 date = (new Date).getTime();
                 var params = {
-                    TableName: 'RDV',
+                    TableName: "2017_RDV_CAP",
                     Item: { // a map of attribute name to AttributeValue
                         uuid: uuidV1(),
                         email: email,
@@ -187,7 +187,7 @@ function signup(req, res) {
 
 function profile(req, res) {
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: req.user.uuid,
         },
@@ -226,7 +226,7 @@ function submit(req, res) {
     // Adding new submission to table
     date = (new Date).getTime();
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Item: { // a map of attribute name to AttributeValue
             uuid: submission_id,
             "user_id": req.user.uuid,
@@ -242,7 +242,7 @@ function submit(req, res) {
         if (err)
             return utils.error(res, 500, "Internal Server Error:" + err);
         var params = {
-            TableName: 'RDV',
+            TableName: "2017_RDV_CAP",
             Key: {
                 uuid: req.user.uuid,
             },
@@ -262,7 +262,7 @@ function submit(req, res) {
                 var user = data.Item;
                 // successful response then add submission to the user array
                 var params = {
-                    TableName: 'RDV',
+                    TableName: "2017_RDV_CAP",
                     Key: {
                         uuid: user.uuid,
                     },
@@ -300,7 +300,7 @@ function submit(req, res) {
 
 function leaderboard(req, res) {
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         IndexName: 'leaderboard', // optional (if querying an index)
         Limit: 20,
         KeyConditionExpression: '#type = :val', // a string representing a constraint on the attribute

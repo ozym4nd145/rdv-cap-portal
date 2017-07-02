@@ -17,7 +17,7 @@ const generateHash = function (password) {
 function create(name, email, password, type, city, phone, college, image_url) {
     var date = (new Date).getTime();
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Item: { // a map of attribute name to AttributeValue
             uuid: uuidV1(),
             email: email,
@@ -62,7 +62,7 @@ function create_fake_user(type, email, password) {
 }
 function batch_create_fake_submission(email, post_id, num) {
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
         KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
         ExpressionAttributeValues: { // a map of substitutions for all attribute values
@@ -87,7 +87,7 @@ function batch_create_fake_submission(email, post_id, num) {
 function create_fake_submission(uuid, post_id,num) {
     if(num <= 0) return;
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: uuid,
         },
@@ -109,7 +109,7 @@ function create_fake_submission(uuid, post_id,num) {
             // Adding new submission to table
             date = (new Date).getTime();
             var params = {
-                TableName: 'RDV',
+                TableName: "2017_RDV_CAP",
                 Item: { // a map of attribute name to AttributeValue
                     uuid: submission_id,
                     "user_id": user_obj.uuid,
@@ -127,7 +127,7 @@ function create_fake_submission(uuid, post_id,num) {
                     throw (err); // an error occurred
                 // successful response then add submission to the user array
                 var params = {
-                    TableName: 'RDV',
+                    TableName: "2017_RDV_CAP",
                     Key: {
                         uuid: user_obj.uuid,
                     },
@@ -168,7 +168,7 @@ function create_fake_task(task_id){
     console.log(taskGen.TASK_UUID);
     
     var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
             uuid: taskGen.get_uuid(),
         },

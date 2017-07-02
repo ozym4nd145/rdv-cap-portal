@@ -15,7 +15,7 @@ function isAuthenticated(req, res, next) {
         if (err)
             return utils.error(res, 401, "Invalid Token");
         var params = {
-            TableName: 'RDV',
+            TableName: "2017_RDV_CAP",
             Key: {
                 uuid: user.uuid,
             },

@@ -12,7 +12,7 @@ function approve_submission(req, res) {
 
   date = (new Date).getTime();
   var params = {
-    TableName: 'RDV',
+    TableName: "2017_RDV_CAP",
     Key: {
       uuid: submission_id,
     },
@@ -35,7 +35,7 @@ function approve_submission(req, res) {
       submission = data.Attributes;
       console.log(submission);
       var params = {
-        TableName: 'RDV',
+        TableName: "2017_RDV_CAP",
         Key: {
           uuid: submission.user_id,
         },
@@ -65,7 +65,7 @@ function approve_submission(req, res) {
 
 function get_submissions(req, res) {
   var params = {
-    TableName: 'RDV',
+    TableName: "2017_RDV_CAP",
     IndexName: 'submission', // optional (if querying an index)
     KeyConditionExpression: 'is_checked = :val', // a string representing a constraint on the attribute
     ExpressionAttributeValues: { // a map of substitutions for all attribute values

@@ -3,7 +3,7 @@ var utils = require("../config/utils.js");
 var dynamodb = utils.connectTableDB();
 
 var params = {
-    TableName: 'RDV',
+    TableName: "2017_RDV_CAP",
 };
 dynamodb.deleteTable(params, function(err, data) {
     if (err) console.log(err); // an error occurred

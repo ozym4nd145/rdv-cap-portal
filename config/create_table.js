@@ -3,7 +3,7 @@ var utils = require("../config/utils.js");
 var dynamodb = utils.connectTableDB();
 
 var params = {
-    TableName: 'RDV',
+    TableName: "2017_RDV_CAP",
     KeySchema: [ // The type of of schema.  Must start with a HASH type, with an optional second RANGE.
         { // Required HASH type attribute
             AttributeName: 'uuid',
@@ -42,8 +42,8 @@ var params = {
         
     ],
     ProvisionedThroughput: { // required provisioned throughput for the table
-        ReadCapacityUnits: 100, 
-        WriteCapacityUnits: 100, 
+        ReadCapacityUnits: 1, 
+        WriteCapacityUnits: 1, 
     },
     GlobalSecondaryIndexes: [ // optional (list of GlobalSecondaryIndex)
         { 
@@ -58,8 +58,8 @@ var params = {
                 ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
             },
             ProvisionedThroughput: { // throughput to provision to the index
-                ReadCapacityUnits: 100,
-                WriteCapacityUnits: 100,
+                ReadCapacityUnits: 1,
+                WriteCapacityUnits: 1,
             },
         },
         { 
@@ -74,8 +74,8 @@ var params = {
                 ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
             },
             ProvisionedThroughput: { // throughput to provision to the index
-                ReadCapacityUnits: 100,
-                WriteCapacityUnits: 100,
+                ReadCapacityUnits: 1,
+                WriteCapacityUnits: 1,
             },
         },
         { 
@@ -94,8 +94,8 @@ var params = {
                 ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
             },
             ProvisionedThroughput: { // throughput to provision to the index
-                ReadCapacityUnits: 100,
-                WriteCapacityUnits: 100,
+                ReadCapacityUnits: 1,
+                WriteCapacityUnits: 1,
             },
         },
         { 
@@ -114,8 +114,8 @@ var params = {
                 ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
             },
             ProvisionedThroughput: { // throughput to provision to the index
-                ReadCapacityUnits: 100,
-                WriteCapacityUnits: 100,
+                ReadCapacityUnits: 1,
+                WriteCapacityUnits: 1,
             },
         },
         // ... more global secondary indexes ...

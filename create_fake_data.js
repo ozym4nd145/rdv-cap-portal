@@ -23,11 +23,11 @@ console.log("Creating submissions");
 create_util.batch_create_fake_submission("suyash1212@gmail.com",1,3);
 create_util.batch_create_fake_submission("korkudeepak@gmail.com",1,2);
 console.log("Created submission postid 1");
-create_util.batch_create_fake_submission("udit01@gmail.com",2,6);
+create_util.batch_create_fake_submission("udit01@gmail.com",2,4);
 create_util.batch_create_fake_submission("suyash1212@gmail.com",2,1);
 console.log("Created submission postid 2");
 create_util.batch_create_fake_submission("suyash101297@gmail.com",3,5);
 create_util.batch_create_fake_submission("saketdingliwal@gmail.com",3,60);
 // console.log("Created submission postid 3");
 
-create_util.batch_create_fake_task(10);
+create_util.batch_create_fake_task(5);
