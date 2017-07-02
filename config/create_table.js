@@ -1,13 +1,6 @@
-var AWS = require('aws-sdk');
+var utils = require("../config/utils.js");
 
-AWS.config.update({
-  accessKeyId: "myKeyId",
-  secretAccessKey: "secretKey",
-  region: "us-west-2",
-  endpoint: "http://localhost:8000"
-});
-
-var dynamodb = new AWS.DynamoDB();
+var dynamodb = utils.connectTableDB();
 
 var params = {
     TableName: 'RDV',

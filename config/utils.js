@@ -2,15 +2,29 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 const config = require('./config');
 
-AWS.config.update({
-  accessKeyId: "myKeyId",
-  secretAccessKey: "secretKey",
-  region: "us-west-2",
-  endpoint: "http://localhost:8000",
-});
+if (process.env.NODE_ENV === 'production') {
+  AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY,
+    secretAccessKey: process.env.SECRET_KEY,
+    region: "ap-south-1",
+    endpoint: new AWS.Endpoint('https://dynamodb.ap-south-1.amazonaws.com')
+  });
+} else {
+  AWS.config.update({
+    accessKeyId: "myKeyId",
+    secretAccessKey: "secretKey",
+    region: "us-west-2",
+    endpoint: "http://localhost:8000",
+  });
+
+}
 
 function connectToDB() {
   return new AWS.DynamoDB.DocumentClient();
+}
+
+function connectTableDB() {
+  return new AWS.DynamoDB();
 }
 
 function generateToken(user) {
@@ -35,5 +49,6 @@ function error(res, statusCode, msg) {
 module.exports = {
   connectToDB: connectToDB,
   generateToken: generateToken,
+  connectTableDB: connectTableDB,
   error: error,
 };
