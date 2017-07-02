@@ -10,5 +10,7 @@ module.exports = {
     },
     "scaling_factor": 1000000000000000, // to avoid conflict in sort key values in leaderboard GSI
     "token_secret" : process.env.TOKEN_SECRET,
+    "task_mail": "tasks@rdv.iitd.ac.in",
+    "task_pass": "nothing_but_randomness"
 
 };

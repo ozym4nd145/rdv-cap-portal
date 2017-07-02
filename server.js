@@ -10,6 +10,7 @@ var cors = require('cors');
 var userController = require("./controllers/user.js");
 var adminController = require("./controllers/admin.js");
 var sessionController = require("./controllers/session.js");
+var taskController = require("./controllers/task.js");
 // enable cors
 var corsOption = {
   origin: true,
@@ -40,6 +41,11 @@ app.post('/api/submit', sessionController.isAuthenticated, userController.submit
 
 app.get('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_submissions);
 app.post('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.approve_submission);
+
+app.get('/api/tasks', sessionController.isAuthenticated, taskController.get_tasks);
+app.post('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.create_task);
+app.put('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.modify_task);
+app.delete('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.delete_task);
 
 
 // launch ======================================================================

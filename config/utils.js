@@ -21,7 +21,7 @@ function generateToken(user) {
     uuid: user.uuid,
   };
   return token = jwt.sign(u, config.token_secret, {
-    expiresIn: 60 * 60 * 24 * 30 // expires in 30 days
+    expiresIn: 60 * 60 * 24 * 60 // expires in 60 days
   });
 }
 

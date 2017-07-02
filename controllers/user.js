@@ -5,8 +5,8 @@ var fbAuth = require("../config/fbAuth.js");
 
 var docClient = utils.connectToDB();
 
+
 function login(req, res) {
-    console.log("inside login");
     const email = req.body.email;
     const password = req.body.password;
     if (!email || !password)
@@ -214,13 +214,13 @@ function profile(req, res) {
 
 function submit(req, res) {
     console.log(req.body);
-    post_id = req.body.post_id;
+    task_id = req.body.task_id;
     url = req.body.image_url;
 
-    if (!post_id || !url)
+    if (!task_id || !url)
         return utils.error(res, 401, "Post id or image url not found");
 
-    // NOTE: PUT A CHECK IF POST_ID IS VALID!!
+    // NOTE: PUT A CHECK IF task_id IS VALID!!
 
     submission_id = uuidV1();
     // Adding new submission to table
@@ -231,7 +231,7 @@ function submit(req, res) {
             uuid: submission_id,
             "user_id": req.user.uuid,
             "type": "submission",
-            "post_id": post_id,
+            "task_id": task_id,
             "url": url,
             "created": date,
             "is_checked": 0,
@@ -267,14 +267,14 @@ function submit(req, res) {
                         uuid: user.uuid,
                     },
                     ExpressionAttributeNames: { // a map of substitutions for attribute names with special characters
-                        "#id": post_id,
+                        "#id": task_id,
                     },
                     ExpressionAttributeValues: {
                         ":r": [submission_id],
                     },
                     ReturnValues: "NONE"
                 };
-                if (!(post_id in user.submission)) {
+                if (!(task_id in user.submission)) {
                     // if new submission
                     params["UpdateExpression"] = "set submission.#id = :r";
 

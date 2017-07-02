@@ -30,10 +30,24 @@
 6. GET: /api/profile
     - params -> token (the jwt token return during sign in, it can also be given as header under x-access-token)
 
+7. GET: /api/tasks
+    - params -> token (the jwt token return during sign in, it can also be given as header under x-access-token)
+    
 ## Admin APIs
 
-7. GET: /api/approve
+8. GET: /api/approve
     - params -> token (the jwt token return during sign in, it can also be given as header under x-access-token)
-8. POST: /api/approve
+
+9. POST: /api/approve
     - params -> submission_id,points, token (the jwt token return during sign in, it can also be given as header under x-access-token)
 
+## God APIs
+
+10. POST: /api/tasks
+    - param -> task_id,name,detail,image_url,token (the jwt token return during sign in, it can also be given as header under x-access-token)
+
+11. PUT: /api/tasks
+    - param -> task_id,name,detail,image_url,token (the jwt token return during sign in, it can also be given as header under x-access-token)
+
+12. DELETE: /api/tasks
+    - param -> task_id,token (the jwt token return during sign in, it can also be given as header under x-access-token)

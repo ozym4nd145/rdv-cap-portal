@@ -4,6 +4,8 @@ var utils = require('./config/utils.js');
 var faker = require('faker');
 faker.locale = "en_IND";
 
+var taskGen = require("./controllers/task");
+
 var docClient = utils.connectToDB();
 
 
@@ -159,9 +161,44 @@ function create_fake_submission(uuid, post_id,num) {
     });
 }
 
+function create_fake_task(task_id){
+    var task = { "task_id": task_id.toString(), "image_url": faker.image.imageUrl(), "detail": faker.lorem.paragraph() , "name": faker.company.catchPhrase() };
+    task["created_by"] = "random_data_generator";
+    task["last_modified"] = (new Date).getTime();
+    console.log(taskGen.TASK_UUID);
+    
+    var params = {
+        TableName: 'RDV',
+        Key: {
+            uuid: taskGen.get_uuid(),
+        },
+        UpdateExpression: "set tasks = list_append(tasks,:r)",
+        ExpressionAttributeValues: {
+            ":r": [task],
+        },
+        ReturnValues: "NONE",
+    };
+
+    docClient.update(params, function (err, data) {
+        if (err) {
+            console.log( "Internal Server Error:" + err);
+        } else {
+            console.log("Task successfully added!");
+        }
+    });
+}
+
+function batch_create_fake_task(num) {
+    for(var i=1;i<=num;i++)
+    {
+        create_fake_task(i);
+    }
+}
+
 module.exports = {
     "create_fake_user": create_fake_user,
     "create_fake_submission": create_fake_submission,
     "batch_create_fake_submission": batch_create_fake_submission,
     "batch_create_fake_user": batch_create_fake_user,
+    "batch_create_fake_task": batch_create_fake_task,
 };

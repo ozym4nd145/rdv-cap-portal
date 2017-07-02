@@ -38,17 +38,22 @@ function isAuthenticated(req, res, next) {
         });
     });
 }
-// route middleware to make sure a user is logged in
+
 function isAdmin(req, res, next) {
-    // if user is authenticated in the session, carry on 
     if (req.user.type == "admin" || req.user.type == "god")
         return next();
 
     return utils.error(res, 403, "You do not have the required permissions");
 }
 
+function isGod(req, res, next) {
+    if (req.user.type == "god")
+        return next();
+    return utils.error(res, 403, "You do not have the required permissions");
+}
 
 module.exports = {
     isAuthenticated: isAuthenticated,
     isAdmin: isAdmin,
+    isGod: isGod,
 }
