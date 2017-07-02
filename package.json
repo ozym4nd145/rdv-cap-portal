@@ -27,6 +27,7 @@
     "ejs": "^2.5.6",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
+    "faker": "^4.1.0",
     "formidable": "^1.1.1",
     "jsonwebtoken": "^7.4.1",
     "morgan": "^1.8.2",

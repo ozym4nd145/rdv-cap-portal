@@ -18,11 +18,16 @@ function isAuthenticated(req, res, next) {
             TableName: 'RDV',
             Key: {
                 uuid: user.uuid,
-            }
+            },
+            ExpressionAttributeNames: {
+                '#type': "type",
+                '#uuid': "uuid",
+            },
+            ProjectionExpression: "#uuid,email,password,fb_id,#type,is_checked,points,created",
         };
         docClient.get(params, function (err, data) {
             if (err) {
-                return utils.error(res, 500, "Internal Server Error");
+                return utils.error(res, 500, "Internal Server Error"+err);
             } else {
                 if (!data.Item)
                     return utils.error(res, 401, "Invalid Token");
@@ -42,7 +47,8 @@ function isAdmin(req, res, next) {
     return utils.error(res, 403, "You do not have the required permissions");
 }
 
+
 module.exports = {
-  isAuthenticated: isAuthenticated,
-  isAdmin: isAdmin,  
+    isAuthenticated: isAuthenticated,
+    isAdmin: isAdmin,
 }
