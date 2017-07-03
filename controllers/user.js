@@ -1,3 +1,7 @@
+/**
+ * Created by Suyash on 02/07/17.
+ */
+
 var uuidV1 = require('uuid/v1');
 var utils = require('../config/utils.js');
 var bcrypt = require('bcrypt-nodejs');

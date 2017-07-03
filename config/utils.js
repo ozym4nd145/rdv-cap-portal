@@ -1,3 +1,7 @@
+/**
+ * Created by Suyash on 02/07/17.
+ */
+
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 const config = require('./config');

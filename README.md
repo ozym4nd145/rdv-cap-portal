@@ -1,5 +1,5 @@
-# rdv-cap-portal
-
+# Rendezvous Campus Ambassador Portal
+##### Created by - Suyash Agrawal (github.com/ozym4nd145)
 # Usage
 
 1. Download dynamodb local (us west 1) and deploy it on port 8000

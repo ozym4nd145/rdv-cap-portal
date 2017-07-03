@@ -1,3 +1,7 @@
+/**
+ * Created by Suyash on 02/07/17.
+ */
+
 var config = require('../config/config.js');
 var utils = require('../config/utils.js');
 var docClient = utils.connectToDB();

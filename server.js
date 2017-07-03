@@ -1,5 +1,7 @@
+/**
+ * Created by Suyash on 02/07/17.
+ */
 var express = require('express');
-var app = express();
 var port = process.env.PORT || 8080;
 
 var morgan = require('morgan');
@@ -19,35 +21,45 @@ var corsOption = {
   exposedHeaders: ['x-auth-token']
 };
 
-app.use(cors(corsOption));
+var router = express.Router();
 
-app.use(morgan('dev')); // log every request to the console
- // get information from html forms
-app.use(bodyParser.urlencoded({ extended: true }));
+router.use(cors(corsOption));
+router.use(morgan('dev')); // log every request to the console
+// get information from html forms
+router.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', function (req, res) {
-    res.sendfile("./index.html");
-    // res.send('Hi, You are in the homepage'); // load the index.ejs file
+router.get('/', function (req, res) {
+  // res.sendfile("./index.html");
+  res.send('Hi, You are in the cap api homepage'); // load the index.ejs file
 });
 
-app.post('/api/login', userController.login);
-app.post('/api/auth/facebook', userController.fb_login );
-app.post('/api/signup', userController.signup);
+router.post('/login', userController.login);
+router.post('/auth/facebook', userController.fb_login);
+router.post('/signup', userController.signup);
 
-app.get('/api/profile', sessionController.isAuthenticated, userController.profile);
-app.get('/api/leaderboard', sessionController.isAuthenticated, userController.leaderboard);
+router.get('/profile', sessionController.isAuthenticated, userController.profile);
+router.get('/leaderboard', sessionController.isAuthenticated, userController.leaderboard);
 
-app.post('/api/submit', sessionController.isAuthenticated, userController.submit);
+router.post('/submit', sessionController.isAuthenticated, userController.submit);
 
-app.get('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_submissions);
-app.post('/api/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.approve_submission);
+router.get('/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_submissions);
+router.post('/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.approve_submission);
 
-app.get('/api/tasks', sessionController.isAuthenticated, taskController.get_tasks);
-app.post('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.create_task);
-app.put('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.modify_task);
-app.delete('/api/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.delete_task);
+router.get('/tasks', sessionController.isAuthenticated, taskController.get_tasks);
+router.post('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.create_task);
+router.put('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.modify_task);
+router.delete('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.delete_task);
 
+if (require.main === module) {
+  // if called directly
+  var app = express();
+  app.use("/api", router);
 
-// launch ======================================================================
-app.listen(port);
-console.log('The magic happens on port ' + port);
+  // launch ======================================================================
+  app.listen(port);
+  console.log('The magic happens on port ' + port);
+}
+else {
+  //if imported as module : for rdv main website
+  module.exports = router;
+}

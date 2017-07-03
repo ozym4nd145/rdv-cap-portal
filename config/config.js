@@ -1,4 +1,6 @@
-// config/auth.js
+/**
+ * Created by Suyash on 02/07/17.
+ */
 
 // expose our config directly to our application using module.exports
 module.exports = {
