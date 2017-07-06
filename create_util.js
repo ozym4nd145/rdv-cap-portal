@@ -97,8 +97,9 @@ function create_fake_submission(uuid, task_id,num) {
         },
         ExpressionAttributeNames: {
             '#uuid': "uuid",
+            '#name': "name",
         },
-        ProjectionExpression: "#uuid,submission",
+        ProjectionExpression: "#uuid,#name,submission",
         ConsistentRead: true,
     };
     docClient.get(params, function (err, data) {
@@ -117,6 +118,7 @@ function create_fake_submission(uuid, task_id,num) {
                 Item: { // a map of attribute name to AttributeValue
                     uuid: submission_id,
                     "user_id": user_obj.uuid,
+                    "name": user_obj.name,
                     "type": "submission",
                     "task_id": task_id,
                     "url": url,

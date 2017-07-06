@@ -322,6 +322,7 @@ function create_submission(req, res) {
         Item: { // a map of attribute name to AttributeValue
             uuid: submission_id,
             "user_id": req.user.uuid,
+            "name": req.user.name,
             "type": "submission",
             "task_id": task_id,
             "url": url,

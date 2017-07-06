@@ -26,8 +26,9 @@ function isAuthenticated(req, res, next) {
             ExpressionAttributeNames: {
                 '#type': "type",
                 '#uuid': "uuid",
+                '#name': "name",
             },
-            ProjectionExpression: "#uuid,email,password,fb_id,#type,is_checked,points,created",
+            ProjectionExpression: "#uuid,email,password,fb_id,#type,is_checked,points,created,#name",
         };
         docClient.get(params, function (err, data) {
             if (err) {
