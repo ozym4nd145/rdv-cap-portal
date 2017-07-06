@@ -53,7 +53,7 @@ router.delete('/tasks', sessionController.isAuthenticated, sessionController.isG
 if (require.main === module) {
   // if called directly
   var app = express();
-  app.use("/api", router);
+  app.use("/api/cap", router);
 
   // launch ======================================================================
   app.listen(port);

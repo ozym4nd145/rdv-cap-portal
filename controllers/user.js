@@ -82,9 +82,6 @@ function fb_login(req, res) {
                         },
                         UpdateExpression: 'SET fb_id = :fb_id, image_url = :profilePicture, fb_token = :token',
                         ConditionExpression: 'attribute_not_exists(fb_id)',
-                        ExpressionAttributeNames: {
-                            '#name': "name",
-                        },
                         ExpressionAttributeValues: { // a map of substitutions for all attribute values
                             ':fb_id': fb_user.fb_id,
                             // ":name": fb_user.name,
