@@ -13,6 +13,7 @@ create_util.create_fake_user("user","korkudeepak@gmail.com","password");
 create_util.create_fake_user("user","udit01@gmail.com","password");
 create_util.create_fake_user("user","saketdingliwal@gmail.com","password");
 create_util.create_fake_user("admin","su@gmail.com","password");
+create_util.create_fake_user("admin","kapilkorku@gmail.com","password");
 create_util.create_fake_user("god","suyash101297@gmail.com","password");
 
 console.log("Created Known Users");
@@ -32,6 +33,7 @@ create_util.batch_create_fake_submission("suyash1212@gmail.com",2,1);
 console.log("Created submission postid 2");
 create_util.batch_create_fake_submission("suyash101297@gmail.com",3,5);
 create_util.batch_create_fake_submission("saketdingliwal@gmail.com",3,60);
+create_util.batch_create_fake_submission("su@gmail.com",3,5);
 // console.log("Created submission postid 3");
 
 create_util.batch_create_fake_task(5);

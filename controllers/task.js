@@ -55,12 +55,16 @@ docClient.query(params, function (err, data) {
             });
         }
         else
+        {
+            console.log("Populating TASK_UUID: "+data.Items[0].uuid);
             TASK_UUID = data.Items[0].uuid;
+        }
     }
 });
 
 //GET TASKS
 function get_tasks(req, res) {
+    console.log("TASK: "+TASK_UUID);
     var params = {
         TableName: "2017_RDV_CAP",
         Key: {
@@ -74,7 +78,11 @@ function get_tasks(req, res) {
         } else {
             if (!data.Item)
                 return utils.error(res, 401, "Invalid task");
-            res.json(data.Item);
+            var tasks = data.Item;
+            tasks["tasks"].sort(function(a,b){
+                return (a.task_id > b.task_id) ? 1 : ((b.task_id > a.task_id) ? -1 : 0);
+            })
+            res.json(tasks);
         }
     });
 }

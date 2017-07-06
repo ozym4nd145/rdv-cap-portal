@@ -7,6 +7,7 @@ const AWS = require('aws-sdk');
 const config = require('./config');
 
 if (process.env.NODE_ENV === 'production') {
+  console.log("Using production");
   AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_KEY,

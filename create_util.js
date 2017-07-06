@@ -64,7 +64,7 @@ function create_fake_user(type, email, password) {
     var college = faker.company.companyName();
     create(name, email, password, type, city, phone, college, image_url);
 }
-function batch_create_fake_submission(email, post_id, num) {
+function batch_create_fake_submission(email, task_id, num) {
     var params = {
         TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
@@ -84,11 +84,11 @@ function batch_create_fake_submission(email, post_id, num) {
             if (!(data.Count > 0))
                 console.log("Email does not exist");
             var user = data.Items[0];
-            create_fake_submission(user.uuid, post_id,num);
+            create_fake_submission(user.uuid, task_id,num);
         }
     });
 }
-function create_fake_submission(uuid, post_id,num) {
+function create_fake_submission(uuid, task_id,num) {
     if(num <= 0) return;
     var params = {
         TableName: "2017_RDV_CAP",
@@ -118,11 +118,12 @@ function create_fake_submission(uuid, post_id,num) {
                     uuid: submission_id,
                     "user_id": user_obj.uuid,
                     "type": "submission",
-                    "post_id": post_id,
+                    "task_id": task_id,
                     "url": url,
                     "created": date,
                     "is_checked": 0,
                     "points": date,
+                    "detail": faker.lorem.paragraph(),
                 },
             };
             console.log("submission", params.Item);
@@ -136,14 +137,14 @@ function create_fake_submission(uuid, post_id,num) {
                         uuid: user_obj.uuid,
                     },
                     ExpressionAttributeNames: { // a map of substitutions for attribute names with special characters
-                        "#id": post_id,
+                        "#id": task_id,
                     },
                     ExpressionAttributeValues: {
                         ":r": [submission_id],
                     },
                     ReturnValues: "NONE"
                 };
-                if (!(post_id in user_obj.submission)) {
+                if (!(task_id in user_obj.submission)) {
                     // if new submission
                     params["UpdateExpression"] = "set submission.#id = :r";
 
@@ -157,7 +158,7 @@ function create_fake_submission(uuid, post_id,num) {
                         console.log("Internal Server Error:" + err);
                     } else {
                         console.log("Submission successfully made!");
-                        create_fake_submission(uuid, post_id,num-1);
+                        create_fake_submission(uuid, task_id,num-1);
                     }
                 });
             });

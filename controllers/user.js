@@ -80,11 +80,14 @@ function fb_login(req, res) {
                         Key: {
                             uuid: old_user.uuid,
                         },
-                        UpdateExpression: 'SET fb_id = :fb_id, image_url = :profilePicture, fb_token = :token',
+                        UpdateExpression: 'SET fb_id = :fb_id, image_url = :profilePicture, fb_token = :token, #name = :name',
                         ConditionExpression: 'attribute_not_exists(fb_id)',
+                        ExpressionAttributeNames: {
+                            "#name": "name",
+                        },
                         ExpressionAttributeValues: { // a map of substitutions for all attribute values
                             ':fb_id': fb_user.fb_id,
-                            // ":name": fb_user.name,
+                            ":name": fb_user.name,
                             // ":last_name": fb_user.lastName,
                             // ":first_name": fb_user.firstName,
                             ":profilePicture": fb_user.profilePicture,
@@ -95,6 +98,7 @@ function fb_login(req, res) {
                     docClient.update(params, function (err, data) {
                         if (err) return utils.error(res, 401, "Internal Server Error: " + err);
                         old_user["image_url"] = fb_user.profilePicture;
+                        old_user["name"] = fb_user.name;
                         const token = utils.generateToken(old_user);
                         delete old_user['password'];
                         delete old_user['fb_id'];
@@ -186,11 +190,11 @@ function signup(req, res) {
     });
 }
 
-function profile(req, res) {
+function get_profile(uuid, cb) {
     var params = {
         TableName: "2017_RDV_CAP",
         Key: {
-            uuid: req.user.uuid,
+            uuid: uuid,
         },
         ExpressionAttributeNames: {
             '#name': "name",
@@ -199,7 +203,11 @@ function profile(req, res) {
         },
         ProjectionExpression: "email,#name,college,#type,points,#uuid,password,image_url,fb_id,submission,city,phone",
     };
-    docClient.get(params, function (err, data) {
+    docClient.get(params, cb);
+}
+
+function profile(req, res) {
+    function callback(err, data) {
         if (err) {
             return utils.error(res, 500, "Internal Server Error: " + err);
         } else {
@@ -210,16 +218,99 @@ function profile(req, res) {
                 user: data.Item,
             });
         }
-    });
+    }
+    get_profile(req.user.uuid, callback);
 }
 
-function submit(req, res) {
+function get_submission(req, res) {
+    function callback(err, data) {
+        if (err) {
+            return utils.error(res, 500, "Internal Server Error: " + err);
+        } else {
+            if (!data.Item)
+                return utils.error(res, 401, "Invalid Token");
+            var submissions = data.Item.submission;
+
+            submission_ids = []
+            for (var task_id in submissions) {
+                if (submissions.hasOwnProperty(task_id)) {
+                    submissions[task_id].forEach(function (uuid) {
+                        var key_dic = {
+                            uuid: uuid
+                        };
+                        submission_ids.push(key_dic);
+                    });
+                }
+            }
+
+            // Recursive function that gets the result of all the submissions if number of
+            // submissions exceed 100.
+            function get_details(prev_result, all_submission_ids) {
+                console.log("Calling recursion");
+                // Return if no submissions made till now
+                if (all_submission_ids.length == 0) {
+                    // sorting the submissions
+                    prev_result.sort(function (a, b) {
+                        return (a.created > b.created) ? 1 : ((b.created > a.created) ? -1 : 0);
+                    });
+                    return res.json(prev_result);
+                }
+
+
+                // // getting all the submission ids to be processed in this request
+                var current_submission_ids = all_submission_ids.slice(0, 100);
+
+                // // creating the ids to be processed in next request
+                var rest_submission_ids = all_submission_ids.slice(100);
+
+                var params = {
+                    RequestItems: { // map of TableName to list of Key to get from each table
+                        "2017_RDV_CAP": {
+                            Keys: current_submission_ids,
+                            AttributesToGet: [
+                                'task_id',
+                                'is_checked',
+                                'points',
+                                'url',
+                                'detail',
+                                'uuid',
+                                'created'
+                            ],
+                            ConsistentRead: false, // optional (true | false)
+                        },
+                    },
+                    ReturnConsumedCapacity: 'NONE',
+                };
+                docClient.batchGet(params, function (err, data) {
+                    if (err) {
+                        return utils.error(res, 500, "Internal Server Error: " + err);
+                    } else {
+                        if (!data.Responses["2017_RDV_CAP"])
+                            return utils.error(res, 401, "Invalid Response from Server");
+                        if (data.UnprocessedKeys["2017_RDV_CAP"])
+                        {
+                            rest_submission_ids = rest_submission_ids.concat(data.UnprocessedKeys["2017_RDV_CAP"]);
+                        }
+                        prev_result = prev_result.concat(data.Responses["2017_RDV_CAP"]);
+                        return get_details(prev_result, rest_submission_ids, callback);
+                    }
+                });
+            }
+
+            return get_details([], submission_ids);
+        }
+    }
+    get_profile(req.user.uuid, callback);
+    // return utils.error(res, 500, "Not yet implemented");
+}
+
+function create_submission(req, res) {
     console.log(req.body);
     task_id = req.body.task_id;
     url = req.body.image_url;
-
-    if (!task_id || !url)
-        return utils.error(res, 401, "Post id or image url not found");
+    detail = req.body.detail;
+    if (!task_id || !url || !detail)
+        return utils.error(res, 401, "Task id or image url or detail not found");
 
     // NOTE: PUT A CHECK IF task_id IS VALID!!
 
@@ -237,6 +328,7 @@ function submit(req, res) {
             "created": date,
             "is_checked": 0,
             "points": date,
+            "detail": detail,
         },
     };
     docClient.put(params, function (err, data) {
@@ -344,7 +436,8 @@ module.exports = {
     login: login,
     signup: signup,
     profile: profile,
-    submit: submit,
+    create_submission: create_submission,
+    get_submission: get_submission,
     leaderboard: leaderboard,
     fb_login: fb_login
 }

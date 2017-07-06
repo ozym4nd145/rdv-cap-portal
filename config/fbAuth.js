@@ -19,8 +19,10 @@ function token_validate(token, cb) {
     json: true
   }, (err, response, profile) => {
     if(err) return(err);
-    if (response.statusCode !== 200) return cb(accessToken.error.message);
-
+    if (response.statusCode !== 200) {
+      // console.log("not valid");
+      return cb(response);
+    }
     const user = {
       profilePicture: `https://graph.facebook.com/${profile.id}/picture?type=large`,
       firstName: profile.first_name,

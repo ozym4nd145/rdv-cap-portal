@@ -40,7 +40,8 @@ router.post('/signup', userController.signup);
 router.get('/profile', sessionController.isAuthenticated, userController.profile);
 router.get('/leaderboard', sessionController.isAuthenticated, userController.leaderboard);
 
-router.post('/submit', sessionController.isAuthenticated, userController.submit);
+router.get('/submit', sessionController.isAuthenticated, userController.get_submission);
+router.post('/submit', sessionController.isAuthenticated, userController.create_submission);
 
 router.get('/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_submissions);
 router.post('/approve', sessionController.isAuthenticated, sessionController.isAdmin, adminController.approve_submission);
