@@ -12,6 +12,7 @@ create_util.create_fake_user("user","suyash1212@gmail.com","password");
 create_util.create_fake_user("user","korkudeepak@gmail.com","password");
 create_util.create_fake_user("user","udit01@gmail.com","password");
 create_util.create_fake_user("user","saketdingliwal@gmail.com","password");
+create_util.create_fake_user("user","pandeyshrey33@gmail.com","password");
 create_util.create_fake_user("admin","su@gmail.com","password");
 create_util.create_fake_user("admin","kapilkorku@gmail.com","password");
 create_util.create_fake_user("god","suyash101297@gmail.com","password");
