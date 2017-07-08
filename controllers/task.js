@@ -53,10 +53,8 @@ docClient.query(params, function (err, data) {
                 else
                     console.log("Task User successfully created");
             });
-        }
-        else
-        {
-            console.log("Populating TASK_UUID: "+data.Items[0].uuid);
+        } else {
+            console.log("Populating TASK_UUID: " + data.Items[0].uuid);
             TASK_UUID = data.Items[0].uuid;
         }
     }
@@ -64,7 +62,7 @@ docClient.query(params, function (err, data) {
 
 //GET TASKS
 function get_tasks(req, res) {
-    console.log("TASK: "+TASK_UUID);
+    console.log("TASK: " + TASK_UUID);
     var params = {
         TableName: "2017_RDV_CAP",
         Key: {
@@ -79,7 +77,7 @@ function get_tasks(req, res) {
             if (!data.Item)
                 return utils.error(res, 401, "Invalid task");
             var tasks = data.Item;
-            tasks["tasks"].sort(function(a,b){
+            tasks["tasks"].sort(function (a, b) {
                 return (a.task_id > b.task_id) ? 1 : ((b.task_id > a.task_id) ? -1 : 0);
             })
             res.json(tasks);
@@ -95,10 +93,15 @@ function create_task(req, res) {
     if (!name || !detail || !task_id)
         return utils.error(res, 401, "Name or detail of task not given or task_id is not a valid integer");
 
-    var task = { "task_id": task_id, "image_url": image_url, "detail": detail, "name": name };
+    var task = {
+        "task_id": task_id,
+        "image_url": image_url,
+        "detail": detail,
+        "name": name
+    };
     task["created_by"] = req.user.uuid;
     task["last_modified"] = (new Date).getTime();
-    
+
     var params = {
         TableName: "2017_RDV_CAP",
         Key: {
@@ -132,7 +135,12 @@ function modify_task(req, res) {
     if (!name || !detail || !task_id)
         return utils.error(res, 401, "Name or detail of task not given or task_id is not given");
 
-    var new_task = { "task_id": task_id, "image_url": image_url, "detail": detail, "name": name };
+    var new_task = {
+        "task_id": task_id,
+        "image_url": image_url,
+        "detail": detail,
+        "name": name
+    };
     new_task["modified_by"] = req.user.uuid;
     new_task["last_modified"] = (new Date).getTime();
 
@@ -152,11 +160,12 @@ function modify_task(req, res) {
             var tasks = data.Item.tasks;
             var new_tasks = [];
             for (var i = 0; i < tasks.length; i++) {
-                if (tasks[i].task_id != task_id)
+                if (tasks[i].task_id != task_id) {
                     new_tasks.push(tasks[i]);
-                else
+                } else {
                     new_task["created_by"] = tasks[i]["created_by"];
                     new_tasks.push(new_task);
+                }
             }
             var params = {
                 TableName: "2017_RDV_CAP",
@@ -241,5 +250,7 @@ module.exports = {
     create_task: create_task,
     modify_task: modify_task,
     delete_task: delete_task,
-    get_uuid: function(){return TASK_UUID;},
+    get_uuid: function () {
+        return TASK_UUID;
+    },
 }
