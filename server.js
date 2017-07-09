@@ -33,9 +33,9 @@ router.get('/', function (req, res) {
   res.send('Hi, You are in the cap api homepage'); // load the index.ejs file
 });
 
-router.post('/login', userController.login);
+// router.post('/login', userController.login);
 router.post('/auth/facebook', userController.fb_login);
-router.post('/signup', userController.signup);
+// router.post('/signup', userController.signup);
 
 router.get('/profile', sessionController.isAuthenticated, userController.profile);
 router.get('/leaderboard', sessionController.isAuthenticated, userController.leaderboard);

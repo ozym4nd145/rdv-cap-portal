@@ -19,6 +19,15 @@ const generateHash = function (password) {
 
 
 function create(name, email, password, type, city, phone, college, image_url) {
+    if (image_url == undefined)
+        image_url = faker.internet.avatar();
+    if (city == undefined)
+        city = faker.address.city();
+    if (phone == undefined)
+        phone = faker.phone.phoneNumber();
+    if (college == undefined)
+        college = faker.company.companyName();
+    
     var date = (new Date).getTime();
     var params = {
         TableName: "2017_RDV_CAP",
@@ -204,6 +213,7 @@ function batch_create_fake_task(num) {
 
 module.exports = {
     "create_fake_user": create_fake_user,
+    "create_real_user": create,
     "create_fake_submission": create_fake_submission,
     "batch_create_fake_submission": batch_create_fake_submission,
     "batch_create_fake_user": batch_create_fake_user,
