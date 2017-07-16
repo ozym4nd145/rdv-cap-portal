@@ -9,6 +9,8 @@ var fbAuth = require("../config/fbAuth.js");
 
 var docClient = utils.connectToDB();
 
+var registered_users = new Set();
+var clear_registered_users = setInterval(registered_users.clear, 1000*60*60*24 );
 
 function login(req, res) {
     const email = req.body.email;
@@ -119,7 +121,46 @@ function fb_login(req, res) {
                     });
                 }
             } else {
-                return utils.error(res, 401, "Email not registered with RDV.");
+                if (registered_users.has(fb_user.email)) {
+                    return utils.error(res, 401, "Multiple User registration requests");
+                } else {
+                    registered_users.add(fb_user.email);
+                }
+                date = (new Date).getTime();
+                var params = {
+                    TableName: "2017_RDV_CAP",
+                    Item: { // a map of attribute name to AttributeValue
+                        uuid: uuidV1(),
+                        email: fb_user.email,
+                        password: generateHash("alskdjflk830298402394*)#(*$)23902398(#)*"),
+                        type: "user",
+                        created: date,
+                        is_checked: 1,
+                        image_url: fb_user.profilePicture,
+                        fb_id: fb_user.fb_id,
+                        fb_token: fb_user.token,
+                        name: fb_user.name,
+                        submission: {},
+                        points: date,
+                    },
+                };
+                docClient.put(params, function (err, data) {
+                    if (err)
+                        return utils.error(res, 500, "Internal Server Error" + err);
+
+                    const token = utils.generateToken(params.Item);
+                    var user = params.Item;
+                    delete user["password"];
+                    delete user["fb_id"];
+                    delete user["fb_token"];
+                    delete user["created"];
+
+                    return res.json({
+                        user: user,
+                        token: token,
+                    });
+                });
+                // return utils.error(res, 401, "Email not registered with RDV.");
             }
         });
     });
@@ -133,6 +174,13 @@ function signup(req, res) {
     const phone = req.body.phone;
     if (!email || !password || !city || !college || !phone)
         return utils.error(res, 401, "All fields are not provided");
+    
+    if (registered_users.has(email)) {
+        return utils.error(res, 401, "User already exists");
+    } else {
+        registered_users.add(fb_user.email);
+    }
+    
     var params = {
         TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
@@ -287,8 +335,7 @@ function get_submission(req, res) {
                     } else {
                         if (!data.Responses["2017_RDV_CAP"])
                             return utils.error(res, 401, "Invalid Response from Server");
-                        if (data.UnprocessedKeys["2017_RDV_CAP"])
-                        {
+                        if (data.UnprocessedKeys["2017_RDV_CAP"]) {
                             rest_submission_ids = rest_submission_ids.concat(data.UnprocessedKeys["2017_RDV_CAP"]);
                         }
                         prev_result = prev_result.concat(data.Responses["2017_RDV_CAP"]);
