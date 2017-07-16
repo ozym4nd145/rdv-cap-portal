@@ -178,7 +178,7 @@ function signup(req, res) {
     if (registered_users.has(email)) {
         return utils.error(res, 401, "User already exists");
     } else {
-        registered_users.add(fb_user.email);
+        registered_users.add(email);
     }
     
     var params = {
