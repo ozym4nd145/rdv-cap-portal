@@ -62,7 +62,7 @@ function fb_login(req, res) {
             IndexName: 'mail_address', // optional (if querying an index)
             KeyConditionExpression: 'email = :value', // a string representing a constraint on the attribute
             ExpressionAttributeValues: { // a map of substitutions for all attribute values
-                ':value': fb_user.email,
+                ':value': fb_user.email || fb_user.fb_id,
             },
             ExpressionAttributeNames: {
                 '#name': "name",
@@ -131,7 +131,7 @@ function fb_login(req, res) {
                     TableName: "2017_RDV_CAP",
                     Item: { // a map of attribute name to AttributeValue
                         uuid: uuidV1(),
-                        email: fb_user.email,
+                        email: fb_user.email || fb_user.fb_id,
                         password: generateHash("alskdjflk830298402394*)#(*$)23902398(#)*"),
                         type: "user",
                         created: date,
