@@ -13,6 +13,7 @@ var userController = require("./controllers/user.js");
 var adminController = require("./controllers/admin.js");
 var sessionController = require("./controllers/session.js");
 var taskController = require("./controllers/task.js");
+var capMonthController = require("./controllers/cap_month.js");
 // enable cors
 var corsOption = {
   origin: true,
@@ -50,6 +51,9 @@ router.get('/tasks', sessionController.isAuthenticated, taskController.get_tasks
 router.post('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.create_task);
 router.put('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.modify_task);
 router.delete('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.delete_task);
+
+router.get('/cap_month', sessionController.isAuthenticated, capMonthController.get_cap_month);
+router.post('/cap_month', sessionController.isAuthenticated, sessionController.isAdmin, capMonthController.set_cap_month);
 
 if (require.main === module) {
   // if called directly

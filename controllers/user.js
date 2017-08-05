@@ -439,6 +439,7 @@ function create_submission(req, res) {
     });
 }
 
+
 function leaderboard(req, res) {
     var params = {
         TableName: "2017_RDV_CAP",
@@ -455,9 +456,10 @@ function leaderboard(req, res) {
         ScanIndexForward: false, // optional (true | false) defines direction of Query in the index
         ExpressionAttributeNames: {
             '#name': "name",
-            '#type': "type"
+            '#type': "type",
+            '#uuid': "uuid"
         },
-        ProjectionExpression: "#name,college,points,image_url,city",
+        ProjectionExpression: "#uuid,#name,college,points,image_url,city",
     };
     docClient.query(params, function (err, data) {
         if (err) {
@@ -487,5 +489,5 @@ module.exports = {
     create_submission: create_submission,
     get_submission: get_submission,
     leaderboard: leaderboard,
-    fb_login: fb_login
+    fb_login: fb_login,
 }
