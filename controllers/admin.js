@@ -163,7 +163,7 @@ function get_cap_of_month(req, res) {
 
   var params = {
     TableName: "2017_RDV_CAP",
-    ProjectionExpression: "email,#name,college,#type,month_points,points,#uuid,password,image_url",
+    ProjectionExpression: "email,#name,college,#type,month_points,points,#uuid,image_url",
     FilterExpression: "#type = :value",
     ExpressionAttributeNames: {
         '#name': "name",
