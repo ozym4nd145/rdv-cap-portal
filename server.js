@@ -34,9 +34,9 @@ router.get('/', function (req, res) {
   res.send('Hi, You are in the cap api homepage'); // load the index.ejs file
 });
 
-// router.post('/login', userController.login);
+//router.post('/login', userController.login);
 router.post('/auth/facebook', userController.fb_login);
-// router.post('/signup', userController.signup);
+//router.post('/signup', userController.signup);
 
 router.get('/profile', sessionController.isAuthenticated, userController.profile);
 router.get('/leaderboard', sessionController.isAuthenticated, userController.leaderboard);
@@ -52,8 +52,8 @@ router.post('/tasks', sessionController.isAuthenticated, sessionController.isGod
 router.put('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.modify_task);
 router.delete('/tasks', sessionController.isAuthenticated, sessionController.isGod, taskController.delete_task);
 
-router.get('/cap_month', sessionController.isAuthenticated, capMonthController.get_cap_month);
-router.post('/cap_month', sessionController.isAuthenticated, sessionController.isAdmin, capMonthController.set_cap_month);
+router.get('/cap_month', sessionController.isAuthenticated, sessionController.isAdmin, adminController.get_cap_of_month);
+//router.post('/cap_month', sessionController.isAuthenticated, sessionController.isAdmin, adminController.add_filed);
 
 if (require.main === module) {
   // if called directly

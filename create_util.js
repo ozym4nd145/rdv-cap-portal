@@ -27,7 +27,7 @@ function create(name, email, password, type, city, phone, college, image_url) {
         phone = faker.phone.phoneNumber();
     if (college == undefined)
         college = faker.company.companyName();
-    
+
     var date = (new Date).getTime();
     var params = {
         TableName: "2017_RDV_CAP",
@@ -44,6 +44,7 @@ function create(name, email, password, type, city, phone, college, image_url) {
             image_url: image_url,
             is_checked: 1,
             submission: {},
+            //month_points:[date,date,date],
             points: date,
         },
     };
@@ -182,7 +183,7 @@ function create_fake_task(task_id){
     task["created_by"] = "random_data_generator";
     task["last_modified"] = (new Date).getTime();
     console.log(taskGen.TASK_UUID);
-    
+
     var params = {
         TableName: "2017_RDV_CAP",
         Key: {

@@ -29,7 +29,7 @@ function login(req, res) {
             '#type': "type",
             '#uuid': "uuid",
         },
-        ProjectionExpression: "email,#name,college,#type,points,#uuid,password,image_url",
+        ProjectionExpression: "email,#name,college,#type,month_points,points,#uuid,password,image_url",
     };
     docClient.query(params, function (err, data) {
         if (err) {
@@ -69,7 +69,7 @@ function fb_login(req, res) {
                 '#uuid': "uuid",
                 '#type': "type"
             },
-            ProjectionExpression: "email,#name,college,#type,points,#uuid,password,image_url,fb_id",
+            ProjectionExpression: "email,#name,college,#type,month_points,points,#uuid,password,image_url,fb_id",
         };
         docClient.query(params, function (err, data) {
             if (err) return utils.error(res, 401, "Internal Server Error" + err);
@@ -141,6 +141,7 @@ function fb_login(req, res) {
                         fb_token: fb_user.token,
                         name: fb_user.name,
                         submission: {},
+                        month_points: [0,0,0],
                         points: date,
                     },
                 };
@@ -174,13 +175,13 @@ function signup(req, res) {
     const phone = req.body.phone;
     if (!email || !password || !city || !college || !phone)
         return utils.error(res, 401, "All fields are not provided");
-    
+
     if (registered_users.has(email)) {
         return utils.error(res, 401, "User already exists");
     } else {
         registered_users.add(email);
     }
-    
+
     var params = {
         TableName: "2017_RDV_CAP",
         IndexName: 'mail_address', // optional (if querying an index)
@@ -215,6 +216,7 @@ function signup(req, res) {
                         created: date,
                         is_checked: 1,
                         submission: {},
+                        month_points: [0,0,0],
                         points: date,
                     },
                 };
@@ -249,7 +251,7 @@ function get_profile(uuid, cb) {
             '#type': "type",
             '#uuid': "uuid",
         },
-        ProjectionExpression: "email,#name,college,#type,points,#uuid,password,image_url,fb_id,submission,city,phone",
+        ProjectionExpression: "email,#name,college,#type,month_points,points,#uuid,password,image_url,fb_id,submission,city,phone",
     };
     docClient.get(params, cb);
 }

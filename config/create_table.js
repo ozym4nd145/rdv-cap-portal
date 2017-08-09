@@ -43,15 +43,15 @@ var params = {
             AttributeName: 'points',
             AttributeType: 'N', // (useful for users only)
         },
-        
+
     ],
     ProvisionedThroughput: { // required provisioned throughput for the table
-        ReadCapacityUnits: 1, 
-        WriteCapacityUnits: 1, 
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1,
     },
     GlobalSecondaryIndexes: [ // optional (list of GlobalSecondaryIndex)
-        { 
-            IndexName: 'mail_address', 
+        {
+            IndexName: 'mail_address',
             KeySchema: [
                 { // Required HASH type attribute
                     AttributeName: 'email',
@@ -66,8 +66,8 @@ var params = {
                 WriteCapacityUnits: 1,
             },
         },
-        { 
-            IndexName: 'facebook_id', 
+        {
+            IndexName: 'facebook_id',
             KeySchema: [
                 { // Required HASH type attribute
                     AttributeName: 'fb_id',
@@ -82,8 +82,8 @@ var params = {
                 WriteCapacityUnits: 1,
             },
         },
-        { 
-            IndexName: 'submission', 
+        {
+            IndexName: 'submission',
             KeySchema: [
                 { // Required HASH type attribute
                     AttributeName: 'is_checked',
@@ -102,8 +102,8 @@ var params = {
                 WriteCapacityUnits: 1,
             },
         },
-        { 
-            IndexName: 'leaderboard', 
+        {
+            IndexName: 'leaderboard',
             KeySchema: [
                 { // Required HASH type attribute
                     AttributeName: 'type',
@@ -124,7 +124,7 @@ var params = {
         },
         // ... more global secondary indexes ...
     ],
-    
+
 };
 dynamodb.createTable(params, function(err, data) {
     if (err) console.log(err); // an error occurred
