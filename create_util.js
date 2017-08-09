@@ -44,7 +44,7 @@ function create(name, email, password, type, city, phone, college, image_url) {
             image_url: image_url,
             is_checked: 1,
             submission: {},
-            //month_points:[date,date,date],
+            month_points:[0,0,0],
             points: date,
         },
     };
